@@ -1,4 +1,8 @@
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_application_reno/all/all.dart';
+import 'package:flutter_application_reno/splashScreen/splash_screen.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class handymanInfoScreen extends StatefulWidget {
   @override
@@ -13,6 +17,25 @@ class _handymanInfoScreenState extends State<handymanInfoScreen> {
   List<String> jobTypeList = ["Electricity", "Isolation", "Painting"];
 
   String? selectedjobType;
+
+  saveHandyInfo() {
+    Map handyInfoMap = {
+      "skills": skillsTextEditingController.text.trim(),
+      "diplome": diplomeTextEditingController.text.trim(),
+      "vat": vatTextEditingController.text.trim(),
+      "jobtype": selectedjobType
+    };
+
+    DatabaseReference handyRef =
+        FirebaseDatabase.instance.ref().child("handyman");
+    handyRef
+        .child(currentFribaseUser!.uid)
+        .child("handyman_details")
+        .set(handyInfoMap);
+    Fluttertoast.showToast(msg: "Handyman Details has been saved.");
+    Navigator.push(
+        context, MaterialPageRoute(builder: (c) => const MySplashScreen()));
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -37,7 +60,6 @@ class _handymanInfoScreenState extends State<handymanInfoScreen> {
             TextField(
                 controller: skillsTextEditingController,
                 keyboardType: TextInputType.text,
-                obscureText: true,
                 style: const TextStyle(color: Colors.black),
                 decoration: const InputDecoration(
                   labelText: "Job",
@@ -52,7 +74,6 @@ class _handymanInfoScreenState extends State<handymanInfoScreen> {
             TextField(
                 controller: diplomeTextEditingController,
                 keyboardType: TextInputType.text,
-                obscureText: true,
                 style: const TextStyle(color: Colors.black),
                 decoration: const InputDecoration(
                   labelText: "Extra",
@@ -67,7 +88,6 @@ class _handymanInfoScreenState extends State<handymanInfoScreen> {
             TextField(
                 controller: vatTextEditingController,
                 keyboardType: TextInputType.datetime,
-                obscureText: true,
                 style: const TextStyle(color: Colors.black),
                 decoration: const InputDecoration(
                   labelText: "Certficate",
@@ -105,8 +125,13 @@ class _handymanInfoScreenState extends State<handymanInfoScreen> {
             const SizedBox(height: 20),
             ElevatedButton(
                 onPressed: () {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (c) => handymanInfoScreen()));
+                  if (skillsTextEditingController.text.isNotEmpty &&
+                      diplomeTextEditingController.text.isNotEmpty &&
+                      vatTextEditingController.text.isNotEmpty &&
+                      jobTypeList != null) {
+                    saveHandyInfo();
+                  }
+                  ;
                 },
                 style: ElevatedButton.styleFrom(
                   primary: Colors.black,

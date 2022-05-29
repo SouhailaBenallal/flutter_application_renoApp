@@ -1,5 +1,10 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_application_reno/all/all.dart';
 import 'package:flutter_application_reno/authentication/signup_screen.dart';
+import 'package:flutter_application_reno/splashScreen/splash_screen.dart';
+import 'package:flutter_application_reno/widgets/progress_dialog.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class SigninScreen extends StatefulWidget {
   const SigninScreen({Key? key}) : super(key: key);
@@ -11,6 +16,47 @@ class SigninScreen extends StatefulWidget {
 class _SigninScreenState extends State<SigninScreen> {
   TextEditingController emailtextEditingController = TextEditingController();
   TextEditingController pswtextEditingController = TextEditingController();
+
+  validateForm() {
+    if (!emailtextEditingController.text.contains("@")) {
+      Fluttertoast.showToast(msg: "Email address is not valid.");
+    } else if (pswtextEditingController.text.isEmpty) {
+      Fluttertoast.showToast(msg: "Password is required");
+    } else {
+      signinHandymanNow();
+    }
+  }
+
+  signinHandymanNow() async {
+    showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext c) {
+          return ProgressDialog(
+            message: "Processing, Please wait...",
+          );
+        });
+
+    final User? firebaseUser = (await fAuth
+            .signInWithEmailAndPassword(
+                email: emailtextEditingController.text.trim(),
+                password: pswtextEditingController.text.trim())
+            .catchError((msg) {
+      Navigator.pop(context);
+      Fluttertoast.showToast(msg: "Error" + msg.toString());
+    }))
+        .user;
+
+    if (firebaseUser != null) {
+      currentFribaseUser = firebaseUser;
+      Fluttertoast.showToast(msg: "Login Successful.");
+      Navigator.push(
+          context, MaterialPageRoute(builder: (c) => MySplashScreen()));
+    } else {
+      Navigator.pop(context);
+      Fluttertoast.showToast(msg: "Error Occured during Login.");
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -66,6 +112,7 @@ class _SigninScreenState extends State<SigninScreen> {
                 onPressed: () {
                   /*  Navigator.push(context,
                       MaterialPageRoute(builder: (c) => handymanInfoScreen()));*/
+                  validateForm();
                 },
                 style: ElevatedButton.styleFrom(
                   primary: Colors.black,

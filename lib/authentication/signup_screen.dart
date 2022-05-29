@@ -1,6 +1,11 @@
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_application_reno/all/all.dart';
 import 'package:flutter_application_reno/authentication/handyman_info_screen.dart';
 import 'package:flutter_application_reno/authentication/signin_screen.dart';
+import 'package:flutter_application_reno/widgets/progress_dialog.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class SignUpScreen extends StatefulWidget {
   @override
@@ -12,6 +17,62 @@ class _SignUpScreenState extends State<SignUpScreen> {
   TextEditingController emailtextEditingController = TextEditingController();
   TextEditingController phonetextEditingController = TextEditingController();
   TextEditingController pswtextEditingController = TextEditingController();
+
+  validateForm() {
+    if (nametextEditingController.text.length < 3) {
+      Fluttertoast.showToast(msg: "Name must be atleast 3 Characters");
+    } else if (!emailtextEditingController.text.contains("@")) {
+      Fluttertoast.showToast(msg: "Email address is not valid.");
+    } else if (phonetextEditingController.text.isEmpty) {
+      Fluttertoast.showToast(msg: "Phone Number is required");
+    } else if (pswtextEditingController.text.length < 6) {
+      Fluttertoast.showToast(msg: "Password must be atleast 6 Characters");
+    } else {
+      saveHandymanInfo();
+    }
+  }
+
+  saveHandymanInfo() async {
+    showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext c) {
+          return ProgressDialog(
+            message: "Processing, Please wait...",
+          );
+        });
+
+    final User? firebaseUser = (await fAuth
+            .createUserWithEmailAndPassword(
+                email: emailtextEditingController.text.trim(),
+                password: pswtextEditingController.text.trim())
+            .catchError((msg) {
+      Navigator.pop(context);
+      Fluttertoast.showToast(msg: "Error" + msg.toString());
+    }))
+        .user;
+
+    if (firebaseUser != null) {
+      Map handymanMap = {
+        "id": firebaseUser.uid,
+        "name": nametextEditingController.text.trim(),
+        "email": emailtextEditingController.text.trim(),
+        "phone": phonetextEditingController.text.trim(),
+      };
+
+      DatabaseReference handymanRef =
+          FirebaseDatabase.instance.ref().child("handyman");
+      handymanRef.child(firebaseUser.uid).set(handymanMap);
+
+      currentFribaseUser = firebaseUser;
+      Fluttertoast.showToast(msg: "Account has been Created.");
+      Navigator.push(
+          context, MaterialPageRoute(builder: (c) => handymanInfoScreen()));
+    } else {
+      Navigator.pop(context);
+      Fluttertoast.showToast(msg: "Account has not been Created");
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -91,8 +152,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
           const SizedBox(height: 20),
           ElevatedButton(
               onPressed: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (c) => handymanInfoScreen()));
+                validateForm();
               },
               style: ElevatedButton.styleFrom(
                 primary: Colors.black,
