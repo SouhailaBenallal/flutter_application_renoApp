@@ -1,6 +1,8 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_application_reno/assistants/assistant_methods.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class WorklistTabPage extends StatefulWidget {
@@ -18,6 +20,10 @@ class _WorklistTabPageState extends State<WorklistTabPage> {
     target: LatLng(37.42796133580664, -122.085749655962),
     zoom: 14.4746,
   );
+
+  Position? handymanCurrentPosition;
+  var geoLocator = Geolocator();
+  LocationPermission? _locationPermission;
 
   blackThemeGoogleMap() {
     // Black theme
@@ -188,6 +194,40 @@ class _WorklistTabPageState extends State<WorklistTabPage> {
                 ''');
   }
 
+  checkIfLocationPermissionAllowed() async {
+    _locationPermission = await Geolocator.requestPermission();
+
+    if (_locationPermission == LocationPermission.denied) {
+      _locationPermission = await Geolocator.requestPermission();
+    }
+  }
+
+  locateHandymanPosition() async {
+    Position cPosition = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high);
+    handymanCurrentPosition = cPosition;
+
+    LatLng latLngPosition = LatLng(
+        handymanCurrentPosition!.latitude, handymanCurrentPosition!.longitude);
+
+    CameraPosition cameraPosition =
+        CameraPosition(target: latLngPosition, zoom: 14);
+    newGoogleMapController!
+        .animateCamera(CameraUpdate.newCameraPosition(cameraPosition));
+
+    String humanReadableAddress =
+        await AssistantMethods.searchAddressForGeographicCoordinates(
+            handymanCurrentPosition!, context);
+    print("this is your address = " + humanReadableAddress);
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+    checkIfLocationPermissionAllowed();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Stack(
@@ -200,6 +240,7 @@ class _WorklistTabPageState extends State<WorklistTabPage> {
             _controllerGoogleMap.complete(controller);
             newGoogleMapController = controller;
             blackThemeGoogleMap();
+            locateHandymanPosition();
           },
         )
       ],
