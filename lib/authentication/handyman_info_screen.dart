@@ -93,7 +93,7 @@ class _handymanInfoScreenState extends State<handymanInfoScreen> {
                 )),
             TextField(
                 controller: vatTextEditingController,
-                keyboardType: TextInputType.datetime,
+                keyboardType: TextInputType.text,
                 style: const TextStyle(color: Colors.black),
                 decoration: const InputDecoration(
                   labelText: "Certficate",

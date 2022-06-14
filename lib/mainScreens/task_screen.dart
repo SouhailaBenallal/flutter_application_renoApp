@@ -1,6 +1,8 @@
 import 'dart:async';
 
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_application_reno/all/all.dart';
 import 'package:flutter_application_reno/models/clientRequest_information.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
@@ -27,6 +29,13 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
 
   String? buttonTitle = "Begin";
   Color? buttonColor = Colors.green;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    saveAssignedHandymanDetailsToClientHandymanRequest();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -193,5 +202,38 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
         ],
       ),
     );
+  }
+
+  saveAssignedHandymanDetailsToClientHandymanRequest() {
+    DatabaseReference databaseReference = FirebaseDatabase.instance
+        .ref()
+        .child("All Handyman request")
+        .child(widget.clientHandymanRequestDetails!.handymanRequestId!);
+
+    // Map handymanLocationDataMap = {
+    //   "latitude" : c
+    // };
+
+    databaseReference.child("status").set("accepted");
+    databaseReference.child("handymanId").set(onlineHandymanData.id);
+    databaseReference.child("handymanName").set(onlineHandymanData.name);
+    databaseReference.child("handymanPhone").set(onlineHandymanData.phone);
+    databaseReference.child("handyman_details").set(
+        onlineHandymanData.skills.toString() +
+            onlineHandymanData.vat.toString() +
+            onlineHandymanData.diplome.toString());
+
+    saveHandymanRequestIdToHandymanHistory();
+  }
+
+  saveHandymanRequestIdToHandymanHistory() {
+    DatabaseReference tripsHistoryRef = FirebaseDatabase.instance
+        .ref()
+        .child("handyman")
+        .child(currentFribaseUser!.uid)
+        .child("tripsHistory");
+    tripsHistoryRef
+        .child(widget.clientHandymanRequestDetails!.handymanRequestId!)
+        .set(true);
   }
 }

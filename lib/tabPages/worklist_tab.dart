@@ -66,6 +66,26 @@ class _WorklistTabPageState extends State<WorklistTabPage> {
 
   readCurrentHandymanInformation() async {
     currentFribaseUser = fAuth.currentUser;
+    FirebaseDatabase.instance
+        .ref()
+        .child("handyman")
+        .child(currentFribaseUser!.uid)
+        .once()
+        .then((snap) {
+      if (snap.snapshot.value != null) {
+        onlineHandymanData.id = (snap.snapshot as Map)["id"];
+        onlineHandymanData.name = (snap.snapshot as Map)["name"];
+        onlineHandymanData.phone = (snap.snapshot as Map)["phone"];
+        onlineHandymanData.email = (snap.snapshot as Map)["email"];
+        onlineHandymanData.skills =
+            (snap.snapshot as Map)["handyman_details"]["skills"];
+        onlineHandymanData.diplome =
+            (snap.snapshot as Map)["handyman_details"]["diplome"];
+        onlineHandymanData.vat =
+            (snap.snapshot as Map)["handyman_details"]["vat"];
+      }
+    });
+
     PushNotificationSystem pushNotificationSystem = PushNotificationSystem();
     pushNotificationSystem.initializeCloudMessaging(context);
     pushNotificationSystem.generateAndGetToken();
