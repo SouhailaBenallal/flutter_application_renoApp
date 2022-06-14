@@ -1,7 +1,10 @@
 import 'package:assets_audio_player/assets_audio_player.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_reno/all/all.dart';
+import 'package:flutter_application_reno/mainScreens/task_screen.dart';
 import 'package:flutter_application_reno/models/clientRequest_information.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class NotificationDialogBox extends StatefulWidget {
   ClientHandymanRequestInformation? clientHandymanRequestDetails;
@@ -163,8 +166,7 @@ class _NotificationDialogBoxState extends State<NotificationDialogBox> {
                       audioPlayer = AssetsAudioPlayer();
 
                       //accept the rideRequest
-
-                      Navigator.pop(context);
+                      acceptHandymanRequest(context);
                     },
                     child: Text(
                       "Accept".toUpperCase(),
@@ -180,5 +182,43 @@ class _NotificationDialogBoxState extends State<NotificationDialogBox> {
         ),
       ),
     );
+  }
+
+  acceptHandymanRequest(BuildContext context) {
+    String getHandymanRequestId = "";
+    FirebaseDatabase.instance
+        .ref()
+        .child("handyman")
+        .child(currentFribaseUser!.uid)
+        .child("newHandymanStatus")
+        .once()
+        .then((snap) {
+      if (snap.snapshot.value != null) {
+        getHandymanRequestId = snap.snapshot.value.toString();
+      } else {
+        Fluttertoast.showToast(msg: "This handyman request do not exists");
+      }
+
+      if (getHandymanRequestId ==
+          widget.clientHandymanRequestDetails!.handymanRequestId) {
+        FirebaseDatabase.instance
+            .ref()
+            .child("handyman")
+            .child(currentFribaseUser!.uid)
+            .child("newHandymanStatus")
+            .set("accepted");
+
+        // send handyman to newHandymanStatus
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => NewTaskScreen(
+                      clientHandymanRequestDetails:
+                          widget.clientHandymanRequestDetails,
+                    )));
+      } else {
+        Fluttertoast.showToast(msg: "This handyman request do not exixists");
+      }
+    });
   }
 }

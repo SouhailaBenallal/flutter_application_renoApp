@@ -58,6 +58,9 @@ class PushNotificationSystem {
 
         String clientName = (snapData.snapshot.value! as Map)["ClientName"];
         String clientPhone = (snapData.snapshot.value! as Map)["ClientPhone"];
+        String describe = (snapData.snapshot.value! as Map)["Describe"];
+
+        String? handymanRequestId = snapData.snapshot.key;
 
         ClientHandymanRequestInformation clientHandymanRequestDetails =
             ClientHandymanRequestInformation();
@@ -66,6 +69,8 @@ class PushNotificationSystem {
         clientHandymanRequestDetails.clientPhone = clientPhone;
         clientHandymanRequestDetails.locationAdress = locationAdress;
         clientHandymanRequestDetails.clientTask = clientTask;
+        clientHandymanRequestDetails.describe = describe;
+        clientHandymanRequestDetails.handymanRequestId = handymanRequestId;
 
         showDialog(
           context: context,
