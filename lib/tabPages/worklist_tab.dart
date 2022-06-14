@@ -339,7 +339,7 @@ class _WorklistTabPageState extends State<WorklistTabPage> {
         .ref()
         .child("handyman")
         .child(currentFribaseUser!.uid)
-        .child("newLocationPlaceStatus");
+        .child("newHandymanStatus");
 
     ref.set("idle");
     ref.onValue.listen((event) {});
@@ -373,7 +373,7 @@ class _WorklistTabPageState extends State<WorklistTabPage> {
         .ref()
         .child("handyman")
         .child(currentFribaseUser!.uid)
-        .child("newLocationPlaceStatus");
+        .child("newHandymanStatus");
     ref.onDisconnect();
     ref.remove();
     ref = null;
