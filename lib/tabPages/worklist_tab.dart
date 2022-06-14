@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_application_reno/all/all.dart';
 import 'package:flutter_application_reno/assistants/assistant_methods.dart';
+import 'package:flutter_application_reno/push_notifications/push_notification_system.dart';
 import 'package:flutter_geofire/flutter_geofire.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:geolocator/geolocator.dart';
@@ -230,11 +231,19 @@ class _WorklistTabPageState extends State<WorklistTabPage> {
     print("this is your address = " + humanReadableAddress);
   }
 
+  readCurrentHandymanInformation() async {
+    currentFribaseUser = fAuth.currentUser;
+    PushNotificationSystem pushNotificationSystem = PushNotificationSystem();
+    pushNotificationSystem.initializeCloudMessaging(context);
+    pushNotificationSystem.generateAndGetToken();
+  }
+
   @override
   void initState() {
     super.initState();
 
     checkIfLocationPermissionAllowed();
+    readCurrentHandymanInformation();
   }
 
   @override

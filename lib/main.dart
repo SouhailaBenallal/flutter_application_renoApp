@@ -1,6 +1,8 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_application_reno/infoHandler/app_info.dart';
 import 'package:flutter_application_reno/splashScreen/splash_screen.dart';
+import 'package:provider/provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -8,14 +10,17 @@ void main() async {
 
   runApp(
     MyApp(
-      child: MaterialApp(
-        title: 'Reno App',
-        theme: ThemeData(
-          primarySwatch: Colors.blue,
+      child: ChangeNotifierProvider(
+        create: (context) => AppInfo(),
+        child: MaterialApp(
+          title: 'Reno App',
+          theme: ThemeData(
+            primarySwatch: Colors.blue,
+          ),
+          // ignore: prefer_const_constructors
+          home: MySplashScreen(),
+          debugShowCheckedModeBanner: false,
         ),
-        // ignore: prefer_const_constructors
-        home: MySplashScreen(),
-        debugShowCheckedModeBanner: false,
       ),
     ),
   );
