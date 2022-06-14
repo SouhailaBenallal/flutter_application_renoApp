@@ -7,6 +7,9 @@ PODS:
   - Firebase/Database (8.15.0):
     - Firebase/CoreOnly
     - FirebaseDatabase (~> 8.15.0)
+  - Firebase/Messaging (8.15.0):
+    - Firebase/CoreOnly
+    - FirebaseMessaging (~> 8.15.0)
   - firebase_auth (3.3.18):
     - Firebase/Auth (= 8.15.0)
     - firebase_core
@@ -16,6 +19,10 @@ PODS:
     - Flutter
   - firebase_database (9.0.14):
     - Firebase/Database (= 8.15.0)
+    - firebase_core
+    - Flutter
+  - firebase_messaging (11.4.1):
+    - Firebase/Messaging (= 8.15.0)
     - firebase_core
     - Flutter
   - FirebaseAuth (8.15.0):
@@ -35,6 +42,20 @@ PODS:
   - FirebaseDatabase (8.15.0):
     - FirebaseCore (~> 8.0)
     - leveldb-library (~> 1.22)
+  - FirebaseInstallations (8.15.0):
+    - FirebaseCore (~> 8.0)
+    - GoogleUtilities/Environment (~> 7.7)
+    - GoogleUtilities/UserDefaults (~> 7.7)
+    - PromisesObjC (< 3.0, >= 1.2)
+  - FirebaseMessaging (8.15.0):
+    - FirebaseCore (~> 8.0)
+    - FirebaseInstallations (~> 8.0)
+    - GoogleDataTransport (~> 9.1)
+    - GoogleUtilities/AppDelegateSwizzler (~> 7.7)
+    - GoogleUtilities/Environment (~> 7.7)
+    - GoogleUtilities/Reachability (~> 7.7)
+    - GoogleUtilities/UserDefaults (~> 7.7)
+    - nanopb (~> 2.30908.0)
   - Flutter (1.0.0)
   - flutter_geofire (0.0.1):
     - Flutter
@@ -77,6 +98,8 @@ PODS:
   - "GoogleUtilities/NSData+zlib (7.7.0)"
   - GoogleUtilities/Reachability (7.7.0):
     - GoogleUtilities/Logger
+  - GoogleUtilities/UserDefaults (7.7.0):
+    - GoogleUtilities/Logger
   - GTMSessionFetcher/Core (1.7.2)
   - leveldb-library (1.22.1)
   - nanopb (2.30908.0):
@@ -91,6 +114,7 @@ DEPENDENCIES:
   - firebase_auth (from `.symlinks/plugins/firebase_auth/ios`)
   - firebase_core (from `.symlinks/plugins/firebase_core/ios`)
   - firebase_database (from `.symlinks/plugins/firebase_database/ios`)
+  - firebase_messaging (from `.symlinks/plugins/firebase_messaging/ios`)
   - Flutter (from `Flutter`)
   - flutter_geofire (from `.symlinks/plugins/flutter_geofire/ios`)
   - fluttertoast (from `.symlinks/plugins/fluttertoast/ios`)
@@ -104,6 +128,8 @@ SPEC REPOS:
     - FirebaseCore
     - FirebaseCoreDiagnostics
     - FirebaseDatabase
+    - FirebaseInstallations
+    - FirebaseMessaging
     - GeoFire
     - GoogleDataTransport
     - GoogleMaps
@@ -121,6 +147,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/firebase_core/ios"
   firebase_database:
     :path: ".symlinks/plugins/firebase_database/ios"
+  firebase_messaging:
+    :path: ".symlinks/plugins/firebase_messaging/ios"
   Flutter:
     :path: Flutter
   flutter_geofire:
@@ -137,10 +165,13 @@ SPEC CHECKSUMS:
   firebase_auth: ace975b530600827bd901a9a18584f7cdaf6d160
   firebase_core: aa1b92020533f5c23955e388c347c58fd64f8627
   firebase_database: 73ae636e5f5b5ebdc7e216738c5dab6514662025
+  firebase_messaging: 943cfe65e0b3f457240489ce67655e40da1d270c
   FirebaseAuth: 3e73bf8abf4fbb40f8b421f361f4cc48ee57388c
   FirebaseCore: 5743c5785c074a794d35f2fff7ecc254a91e08b1
   FirebaseCoreDiagnostics: 92e07a649aeb66352b319d43bdd2ee3942af84cb
   FirebaseDatabase: f567afd233e54a303d84423207736590a6feb419
+  FirebaseInstallations: 40bd9054049b2eae9a2c38ef1c3dd213df3605cd
+  FirebaseMessaging: 5e5118a2383b3531e730d974680954c679ca0a13
   Flutter: 50d75fe2f02b26cc09d224853bb45737f8b3214a
   flutter_geofire: 18797208c9042b71a59cb031c42d5670b97aefd1
   fluttertoast: 16fbe6039d06a763f3533670197d01fc73459037

@@ -14,7 +14,13 @@ class _handymanInfoScreenState extends State<handymanInfoScreen> {
   TextEditingController diplomeTextEditingController = TextEditingController();
   TextEditingController vatTextEditingController = TextEditingController();
 
-  List<String> jobTypeList = ["Electricity", "Isolation", "Painting"];
+  List<String> jobTypeList = [
+    "Heating engineer",
+    "Insulator",
+    "Electrician",
+    "Painter",
+    "Plumber"
+  ];
 
   String? selectedjobType;
 
