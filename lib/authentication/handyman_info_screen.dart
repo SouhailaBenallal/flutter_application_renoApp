@@ -68,8 +68,8 @@ class _handymanInfoScreenState extends State<handymanInfoScreen> {
                 keyboardType: TextInputType.text,
                 style: const TextStyle(color: Colors.black),
                 decoration: const InputDecoration(
-                  labelText: "Job",
-                  hintText: "Job",
+                  labelText: "Job Description",
+                  hintText: "Job Description",
                   enabledBorder: UnderlineInputBorder(
                       borderSide: BorderSide(color: Colors.black)),
                   focusedBorder: UnderlineInputBorder(
@@ -82,8 +82,8 @@ class _handymanInfoScreenState extends State<handymanInfoScreen> {
                 keyboardType: TextInputType.text,
                 style: const TextStyle(color: Colors.black),
                 decoration: const InputDecoration(
-                  labelText: "Extra",
-                  hintText: "Extra",
+                  labelText: "Certificate/Diplome",
+                  hintText: "Certificate/Diplome",
                   enabledBorder: UnderlineInputBorder(
                       borderSide: BorderSide(color: Colors.black)),
                   focusedBorder: UnderlineInputBorder(
@@ -96,8 +96,8 @@ class _handymanInfoScreenState extends State<handymanInfoScreen> {
                 keyboardType: TextInputType.text,
                 style: const TextStyle(color: Colors.black),
                 decoration: const InputDecoration(
-                  labelText: "Certficate",
-                  hintText: "Certficate",
+                  labelText: "Extra Info",
+                  hintText: "Extra Info",
                   enabledBorder: UnderlineInputBorder(
                       borderSide: BorderSide(color: Colors.black)),
                   focusedBorder: UnderlineInputBorder(

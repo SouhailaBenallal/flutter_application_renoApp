@@ -9,6 +9,7 @@ class ClientHandymanRequestInformation {
   String? clientTask;
   String? handymanRequestId;
   String? describe;
+  String? clientHours;
 
   ClientHandymanRequestInformation(
       {this.locationLat,
@@ -18,5 +19,6 @@ class ClientHandymanRequestInformation {
       this.clientPhone,
       this.clientTask,
       this.handymanRequestId,
-      this.describe});
+      this.describe,
+      this.clientHours});
 }

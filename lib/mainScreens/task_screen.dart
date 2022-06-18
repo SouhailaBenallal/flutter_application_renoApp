@@ -4,9 +4,11 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_reno/all/all.dart';
 import 'package:flutter_application_reno/models/clientRequest_information.dart';
+import 'package:flutter_application_reno/widgets/fare_amount_collection_dialog.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 import '../assistants/black_theme_google_map.dart';
+import '../widgets/progress_dialog.dart';
 
 class NewTaskScreen extends StatefulWidget {
   ClientHandymanRequestInformation? clientHandymanRequestDetails;
@@ -27,14 +29,15 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
     zoom: 14.4746,
   );
 
-  String? buttonTitle = "Begin";
+  String? buttonTitle = "Can we start";
   Color? buttonColor = Colors.green;
+  String handymanRequestStatus = "accepted";
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    saveAssignedHandymanDetailsToClientHandymanRequest();
+    saveAssignedHandymanDetailsToClientRequest();
   }
 
   @override
@@ -50,7 +53,7 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
             onMapCreated: (GoogleMapController controller) {
               _controllerGoogleMap.complete(controller);
               newGoogleMapController = controller;
-              blackThemeGoogleMap(newGoogleMapController);
+              // blackThemeGoogleMap(newGoogleMapController);
             },
           ),
           Positioned(
@@ -59,13 +62,13 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
             right: 0,
             child: Container(
               decoration: const BoxDecoration(
-                  color: Colors.black,
+                  color: Colors.white,
                   borderRadius: BorderRadius.only(
                     topLeft: Radius.circular(18),
                   ),
                   boxShadow: [
                     BoxShadow(
-                        color: Colors.white30,
+                        color: Colors.white,
                         blurRadius: 18,
                         spreadRadius: .5,
                         offset: Offset(0.6, 0.6))
@@ -76,11 +79,11 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
                 child: Column(children: [
                   // Task
                   const Text(
-                    "Lorem ipsum",
+                    "All Information of client",
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
-                      color: Colors.lightGreenAccent,
+                      color: Colors.black,
                     ),
                   ),
                   // User name - icon
@@ -97,19 +100,23 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
                   ),
 
                   Row(
-                    children: const [
-                      Text(
-                        "User name",
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.lightGreenAccent,
+                    children: [
+                      Expanded(
+                        child: Container(
+                          child: Text(
+                            widget.clientHandymanRequestDetails!.clientName!,
+                            style: const TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black,
+                            ),
+                          ),
                         ),
                       ),
-                      Padding(
+                      const Padding(
                         padding: EdgeInsets.all(10.0),
                       ),
-                      Icon(
+                      const Icon(
                         Icons.phone_android,
                         color: Colors.white,
                       )
@@ -181,7 +188,56 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
                   ),
                   const SizedBox(height: 10.0),
                   ElevatedButton.icon(
-                      onPressed: () {},
+                      onPressed: () {
+                        //[driver has arrived at user PickUp Location] - Arrived Button
+                        if (handymanRequestStatus == "accepted") {
+                          handymanRequestStatus = "arrived";
+
+                          FirebaseDatabase.instance
+                              .ref()
+                              .child("All Handyman request")
+                              .child(widget.clientHandymanRequestDetails!
+                                  .handymanRequestId!)
+                              .child("status")
+                              .set(handymanRequestStatus);
+
+                          setState(() {
+                            buttonTitle = "Let's started"; //start the trip
+                            buttonColor = Colors.yellow[700];
+                          });
+
+                          showDialog(
+                            context: context,
+                            barrierDismissible: false,
+                            builder: (BuildContext c) => ProgressDialog(
+                              message: "Loading...",
+                            ),
+                          );
+
+                          Navigator.pop(context);
+                        }
+                        //[user has already sit in driver's car. Driver start trip now] - Lets Go Button
+                        else if (handymanRequestStatus == "arrived") {
+                          handymanRequestStatus = "busyTask";
+
+                          FirebaseDatabase.instance
+                              .ref()
+                              .child("All Handyman request")
+                              .child(widget.clientHandymanRequestDetails!
+                                  .handymanRequestId!)
+                              .child("status")
+                              .set(handymanRequestStatus);
+
+                          setState(() {
+                            buttonTitle = "End Trip"; //end the trip
+                            buttonColor = Colors.redAccent;
+                          });
+                        }
+                        //[user/Driver reached to the dropOff Destination Location] - End Trip Button
+                        else if (handymanRequestStatus == "busyTask") {
+                          endTaskNow();
+                        }
+                      },
                       style: ElevatedButton.styleFrom(primary: buttonColor),
                       icon: const Icon(
                         Icons.task,
@@ -191,7 +247,7 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
                       label: Text(
                         buttonTitle!,
                         style: const TextStyle(
-                            color: Colors.white,
+                            color: Colors.black,
                             fontSize: 14,
                             fontWeight: FontWeight.bold),
                       )),
@@ -204,35 +260,115 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
     );
   }
 
-  saveAssignedHandymanDetailsToClientHandymanRequest() {
+  endTaskNow() async {
+    calculateFareAmount() {
+      if (handymanTaskJob == "Heating engineer") {
+        double resultFareAmount = double.parse(
+            (widget.clientHandymanRequestDetails!.clientHours!.toString()) *
+                50);
+        return resultFareAmount;
+      } else if (handymanTaskJob == "Insulator") {
+        double resultFareAmount = double.parse(
+            (widget.clientHandymanRequestDetails!.clientHours!.toString()) *
+                60);
+        return resultFareAmount;
+      } else if (handymanTaskJob == "Electrician") {
+        double resultFareAmount = double.parse(
+            (widget.clientHandymanRequestDetails!.clientHours!.toString()) *
+                65);
+        return resultFareAmount;
+      } else if (handymanTaskJob == "Painter") {
+        double resultFareAmount = double.parse(
+            (widget.clientHandymanRequestDetails!.clientHours!.toString()) *
+                30);
+        return resultFareAmount;
+      } else if (handymanTaskJob == "Painter") {
+        double resultFareAmount = double.parse(
+            (widget.clientHandymanRequestDetails!.clientHours!.toString()) *
+                55);
+        return resultFareAmount;
+      }
+    }
+
+    FirebaseDatabase.instance
+        .ref()
+        .child("All Handyman request")
+        .child(widget.clientHandymanRequestDetails!.handymanRequestId!)
+        .child("status")
+        .set("ended");
+
+    double totalFareAmount = double.parse(calculateFareAmount().toString());
+    FirebaseDatabase.instance
+        .ref()
+        .child("All Handyman request")
+        .child(widget.clientHandymanRequestDetails!.handymanRequestId!)
+        .child("totalFareAmount")
+        .set("Last Thing");
+    FirebaseDatabase.instance
+        .ref()
+        .child("All Handyman request")
+        .child(widget.clientHandymanRequestDetails!.handymanRequestId!)
+        .child("totalFareAmount")
+        .set(totalFareAmount);
+
+    Navigator.pop(context);
+    showDialog(
+        context: context,
+        builder: (BuildContext c) =>
+            FareAmountCollectionDialog(totalFareAmount: totalFareAmount));
+
+    saveFareAmountToHandaymanEarnings(double totalFareAmount) {
+      FirebaseDatabase.instance
+          .ref()
+          .child("handyman")
+          .child(currentFribaseUser!.uid)
+          .child("earnings")
+          .once()
+          .then((snap) {
+        if (snap.snapshot.value != null) {
+          double oldEarnings = double.parse(snap.snapshot.value.toString());
+          double handymanTotalEarnings = totalFareAmount + oldEarnings;
+          FirebaseDatabase.instance
+              .ref()
+              .child("handyman")
+              .child(currentFribaseUser!.uid)
+              .child("earnings")
+              .set(handymanTotalEarnings.toString());
+        } else {
+          FirebaseDatabase.instance
+              .ref()
+              .child("handyman")
+              .child(currentFribaseUser!.uid)
+              .child("earnings")
+              .set(totalFareAmount.toString());
+        }
+      });
+    }
+  }
+
+  saveAssignedHandymanDetailsToClientRequest() {
     DatabaseReference databaseReference = FirebaseDatabase.instance
         .ref()
         .child("All Handyman request")
         .child(widget.clientHandymanRequestDetails!.handymanRequestId!);
 
-    // Map handymanLocationDataMap = {
-    //   "latitude" : c
-    // };
-
-    databaseReference.child("status").set("accepted");
+    databaseReference.child("status").set("Accepted");
     databaseReference.child("handymanId").set(onlineHandymanData.id);
     databaseReference.child("handymanName").set(onlineHandymanData.name);
     databaseReference.child("handymanPhone").set(onlineHandymanData.phone);
-    databaseReference.child("handyman_details").set(
-        onlineHandymanData.skills.toString() +
-            onlineHandymanData.vat.toString() +
-            onlineHandymanData.diplome.toString());
-
+    databaseReference
+        .child("handyman_details")
+        .set(onlineHandymanData.jobtype.toString());
     saveHandymanRequestIdToHandymanHistory();
   }
 
   saveHandymanRequestIdToHandymanHistory() {
-    DatabaseReference tripsHistoryRef = FirebaseDatabase.instance
+    DatabaseReference handymansHistoryRef = FirebaseDatabase.instance
         .ref()
         .child("handyman")
         .child(currentFribaseUser!.uid)
-        .child("tripsHistory");
-    tripsHistoryRef
+        .child("handymansHistory");
+    handymansHistoryRef
         .child(widget.clientHandymanRequestDetails!.handymanRequestId!)
         .set(true);
   }

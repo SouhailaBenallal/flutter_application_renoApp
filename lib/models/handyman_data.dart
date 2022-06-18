@@ -6,6 +6,7 @@ class HandymanData {
   String? skills;
   String? diplome;
   String? vat;
+  String? jobtype;
 
   HandymanData(
       {this.id,
@@ -14,5 +15,6 @@ class HandymanData {
       this.email,
       this.skills,
       this.diplome,
-      this.vat});
+      this.vat,
+      this.jobtype});
 }

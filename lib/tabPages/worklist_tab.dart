@@ -61,7 +61,7 @@ class _WorklistTabPageState extends State<WorklistTabPage> {
     String humanReadableAddress =
         await AssistantMethods.searchAddressForGeographicCoordinates(
             handymanCurrentPosition!, context);
-    print("this is your address = " + humanReadableAddress);
+    // print("this is your address = " + humanReadableAddress);
   }
 
   readCurrentHandymanInformation() async {
@@ -71,20 +71,50 @@ class _WorklistTabPageState extends State<WorklistTabPage> {
         .child("handyman")
         .child(currentFribaseUser!.uid)
         .once()
-        .then((snap) {
+        .then((DatabaseEvent snap) {
       if (snap.snapshot.value != null) {
-        onlineHandymanData.id = (snap.snapshot as Map)["id"];
-        onlineHandymanData.name = (snap.snapshot as Map)["name"];
-        onlineHandymanData.phone = (snap.snapshot as Map)["phone"];
-        onlineHandymanData.email = (snap.snapshot as Map)["email"];
-        onlineHandymanData.skills =
-            (snap.snapshot as Map)["handyman_details"]["skills"];
+        onlineHandymanData.id = (snap.snapshot.value as Map)["id"];
+        onlineHandymanData.name = (snap.snapshot.value as Map)["name"];
+        onlineHandymanData.phone = (snap.snapshot.value as Map)["phone"];
+        onlineHandymanData.email = (snap.snapshot.value as Map)["email"];
         onlineHandymanData.diplome =
-            (snap.snapshot as Map)["handyman_details"]["diplome"];
+            (snap.snapshot.value as Map)["handyman_details"]["diplome"];
+        onlineHandymanData.jobtype =
+            (snap.snapshot.value as Map)["handyman_details"]["jobtype"];
+        onlineHandymanData.skills =
+            (snap.snapshot.value as Map)["handyman_details"]["skills"];
         onlineHandymanData.vat =
-            (snap.snapshot as Map)["handyman_details"]["vat"];
+            (snap.snapshot.value as Map)["handyman_details"]["vat"];
+        handymanTaskJob =
+            (snap.snapshot.value as Map)["handyman_details"]["jobtype"];
+
+        print('Details');
+        print(snap.snapshot.value as Map);
+        print(onlineHandymanData.name);
+        print(onlineHandymanData.diplome);
       }
     });
+
+    // FirebaseDatabase.instance
+    //     .ref()
+    //     .child("handyman")
+    //     .child(currentFribaseUser!.uid)
+    //     .once()
+    //     .then((snap) {
+    // if (snap.snapshot.value != null) {
+    //   onlineHandymanData.id = (snap.snapshot as Map)["id"];
+    //   onlineHandymanData.name = (snap.snapshot as Map)["name"];
+    //   onlineHandymanData.phone = (snap.snapshot as Map)["phone"];
+    //   onlineHandymanData.email = (snap.snapshot as Map)["email"];
+    //   onlineHandymanData.skills =
+    //       (snap.snapshot as Map)["handyman_details"]["skills"];
+    //   onlineHandymanData.diplome =
+    //       (snap.snapshot as Map)["handyman_details"]["diplome"];
+    //   onlineHandymanData.vat =
+    //       (snap.snapshot as Map)["handyman_details"]["vat"];
+    // }
+    //   print("Car")
+    // });
 
     PushNotificationSystem pushNotificationSystem = PushNotificationSystem();
     pushNotificationSystem.initializeCloudMessaging(context);

@@ -5,6 +5,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_application_reno/models/handyman_data.dart';
 import 'package:geolocator/geolocator.dart';
 
+import '../models/clientRequest_information.dart';
 import '../models/handyman_model.dart';
 
 final FirebaseAuth fAuth = FirebaseAuth.instance;
@@ -13,3 +14,5 @@ ClientModel? clientModelCurrentinfo;
 AssetsAudioPlayer audioPlayer = AssetsAudioPlayer();
 Position? clientCurrentPosition;
 HandymanData onlineHandymanData = HandymanData();
+String? handymanTaskJob = "";
+ClientHandymanRequestInformation? clientHandymanRequestDetails;

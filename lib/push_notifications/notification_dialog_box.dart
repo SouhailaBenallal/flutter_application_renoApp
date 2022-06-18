@@ -1,6 +1,8 @@
 import 'package:assets_audio_player/assets_audio_player.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_application_reno/all/all.dart';
 import 'package:flutter_application_reno/mainScreens/task_screen.dart';
 import 'package:flutter_application_reno/models/clientRequest_information.dart';
@@ -145,8 +147,37 @@ class _NotificationDialogBoxState extends State<NotificationDialogBox> {
                       audioPlayer = AssetsAudioPlayer();
 
                       //cancel the rideRequest
+                      FirebaseDatabase.instance
+                          .ref()
+                          .child("All Handyman request")
+                          .child(widget
+                              .clientHandymanRequestDetails!.handymanRequestId!)
+                          .remove()
+                          .then((value) {
+                        FirebaseDatabase.instance
+                            .ref()
+                            .child("handyman")
+                            .child(currentFribaseUser!.uid)
+                            .child("newHandymanStatus")
+                            .set("idle");
+                      }).then((value) {
+                        FirebaseDatabase.instance
+                            .ref()
+                            .child("handyman")
+                            .child(currentFribaseUser!.uid)
+                            .child("handymansHistory")
+                            .child(widget.clientHandymanRequestDetails!
+                                .handymanRequestId!)
+                            .remove();
+                      }).then((value) {
+                        Fluttertoast.showToast(
+                            msg:
+                                "Handyman Request has been Cancelled. Successfully. Restart App Now");
+                      });
 
-                      Navigator.pop(context);
+                      Future.delayed(const Duration(milliseconds: 2000), () {
+                        SystemNavigator.pop();
+                      });
                     },
                     child: Text(
                       "Cancel".toUpperCase(),

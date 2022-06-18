@@ -59,6 +59,7 @@ class PushNotificationSystem {
         String clientName = (snapData.snapshot.value! as Map)["ClientName"];
         String clientPhone = (snapData.snapshot.value! as Map)["ClientPhone"];
         String describe = (snapData.snapshot.value! as Map)["Describe"];
+        String clientHours = (snapData.snapshot.value! as Map)["Hours"];
 
         String? handymanRequestId = snapData.snapshot.key;
 
@@ -71,6 +72,7 @@ class PushNotificationSystem {
         clientHandymanRequestDetails.clientTask = clientTask;
         clientHandymanRequestDetails.describe = describe;
         clientHandymanRequestDetails.handymanRequestId = handymanRequestId;
+        clientHandymanRequestDetails.clientHours = clientHours;
 
         showDialog(
           context: context,
@@ -86,8 +88,8 @@ class PushNotificationSystem {
 
   Future generateAndGetToken() async {
     String? registrationToken = await messaging.getToken();
-    print("FCM Registration Token: ");
-    print(registrationToken);
+    // print("FCM Registration Token: ");
+    // print(registrationToken);
 
     FirebaseDatabase.instance
         .ref()
