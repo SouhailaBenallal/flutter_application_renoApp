@@ -99,7 +99,7 @@ class _FareAmountCollectionDialogState
                       ),
                     ),
                     Text(
-                      "\$  " + widget.totalFareAmount!.toString(),
+                      "\€  " + widget.totalFareAmount!.toString(),
                       style: const TextStyle(
                         fontSize: 20,
                         color: Colors.white,

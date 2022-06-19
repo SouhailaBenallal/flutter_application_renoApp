@@ -202,7 +202,7 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
                               .set(handymanRequestStatus);
 
                           setState(() {
-                            buttonTitle = "Let's started"; //start the trip
+                            buttonTitle = "Let's started";
                             buttonColor = Colors.yellow[700];
                           });
 
@@ -215,9 +215,7 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
                           );
 
                           Navigator.pop(context);
-                        }
-                        //[user has already sit in driver's car. Driver start trip now] - Lets Go Button
-                        else if (handymanRequestStatus == "arrived") {
+                        } else if (handymanRequestStatus == "arrived") {
                           handymanRequestStatus = "busyTask";
 
                           FirebaseDatabase.instance
@@ -229,12 +227,10 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
                               .set(handymanRequestStatus);
 
                           setState(() {
-                            buttonTitle = "End Trip"; //end the trip
+                            buttonTitle = "Finish";
                             buttonColor = Colors.redAccent;
                           });
-                        }
-                        //[user/Driver reached to the dropOff Destination Location] - End Trip Button
-                        else if (handymanRequestStatus == "busyTask") {
+                        } else if (handymanRequestStatus == "busyTask") {
                           endTaskNow();
                         }
                       },
@@ -261,35 +257,6 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
   }
 
   endTaskNow() async {
-    calculateFareAmount() {
-      if (handymanTaskJob == "Heating engineer") {
-        double resultFareAmount = double.parse(
-            (widget.clientHandymanRequestDetails!.clientHours!.toString()) *
-                50);
-        return resultFareAmount;
-      } else if (handymanTaskJob == "Insulator") {
-        double resultFareAmount = double.parse(
-            (widget.clientHandymanRequestDetails!.clientHours!.toString()) *
-                60);
-        return resultFareAmount;
-      } else if (handymanTaskJob == "Electrician") {
-        double resultFareAmount = double.parse(
-            (widget.clientHandymanRequestDetails!.clientHours!.toString()) *
-                65);
-        return resultFareAmount;
-      } else if (handymanTaskJob == "Painter") {
-        double resultFareAmount = double.parse(
-            (widget.clientHandymanRequestDetails!.clientHours!.toString()) *
-                30);
-        return resultFareAmount;
-      } else if (handymanTaskJob == "Painter") {
-        double resultFareAmount = double.parse(
-            (widget.clientHandymanRequestDetails!.clientHours!.toString()) *
-                55);
-        return resultFareAmount;
-      }
-    }
-
     FirebaseDatabase.instance
         .ref()
         .child("All Handyman request")
@@ -297,13 +264,33 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
         .child("status")
         .set("ended");
 
+    calculateFareAmount() {
+      if (handymanTaskJob == "Heating engineer") {
+        double resultFareAmount = 50;
+        return resultFareAmount;
+      } else if (handymanTaskJob == "Insulator") {
+        double resultFareAmount = 60;
+        return resultFareAmount;
+      } else if (handymanTaskJob == "Electrician") {
+        double resultFareAmount = 65;
+        return resultFareAmount;
+      } else if (handymanTaskJob == "Painter") {
+        double resultFareAmount = 30;
+        return resultFareAmount;
+      } else if (handymanTaskJob == "Painter") {
+        double resultFareAmount = 55;
+        return resultFareAmount;
+      }
+    }
+
     double totalFareAmount = double.parse(calculateFareAmount().toString());
-    FirebaseDatabase.instance
-        .ref()
-        .child("All Handyman request")
-        .child(widget.clientHandymanRequestDetails!.handymanRequestId!)
-        .child("totalFareAmount")
-        .set("Last Thing");
+
+    // FirebaseDatabase.instance
+    //     .ref()
+    //     .child("All Handyman request")
+    //     .child(widget.clientHandymanRequestDetails!.handymanRequestId!)
+    //     .child("totalFareAmount")
+    //     .set("Last Thing");
     FirebaseDatabase.instance
         .ref()
         .child("All Handyman request")
@@ -316,34 +303,35 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
         context: context,
         builder: (BuildContext c) =>
             FareAmountCollectionDialog(totalFareAmount: totalFareAmount));
+    saveFareAmountToHandaymanEarnings(totalFareAmount);
+  }
 
-    saveFareAmountToHandaymanEarnings(double totalFareAmount) {
-      FirebaseDatabase.instance
-          .ref()
-          .child("handyman")
-          .child(currentFribaseUser!.uid)
-          .child("earnings")
-          .once()
-          .then((snap) {
-        if (snap.snapshot.value != null) {
-          double oldEarnings = double.parse(snap.snapshot.value.toString());
-          double handymanTotalEarnings = totalFareAmount + oldEarnings;
-          FirebaseDatabase.instance
-              .ref()
-              .child("handyman")
-              .child(currentFribaseUser!.uid)
-              .child("earnings")
-              .set(handymanTotalEarnings.toString());
-        } else {
-          FirebaseDatabase.instance
-              .ref()
-              .child("handyman")
-              .child(currentFribaseUser!.uid)
-              .child("earnings")
-              .set(totalFareAmount.toString());
-        }
-      });
-    }
+  saveFareAmountToHandaymanEarnings(double totalFareAmount) {
+    FirebaseDatabase.instance
+        .ref()
+        .child("handyman")
+        .child(currentFribaseUser!.uid)
+        .child("earnings")
+        .once()
+        .then((snap) {
+      if (snap.snapshot.value != null) {
+        double oldEarnings = double.parse(snap.snapshot.value.toString());
+        double handymanTotalEarnings = totalFareAmount + oldEarnings;
+        FirebaseDatabase.instance
+            .ref()
+            .child("handyman")
+            .child(currentFribaseUser!.uid)
+            .child("earnings")
+            .set(handymanTotalEarnings.toString());
+      } else {
+        FirebaseDatabase.instance
+            .ref()
+            .child("handyman")
+            .child(currentFribaseUser!.uid)
+            .child("earnings")
+            .set(totalFareAmount.toString());
+      }
+    });
   }
 
   saveAssignedHandymanDetailsToClientRequest() {
