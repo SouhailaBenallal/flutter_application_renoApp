@@ -32,9 +32,6 @@ class _WorklistTabPageState extends State<WorklistTabPage> {
   var geoLocator = Geolocator();
   LocationPermission? _locationPermission;
 
-  String statusText = "Now Offline";
-  Color buttonColor = Colors.grey;
-  bool isHandymanActive = false;
   StreamSubscription<Position>? streamSubscriptionPosition;
 
   checkIfLocationPermissionAllowed() async {
@@ -62,6 +59,7 @@ class _WorklistTabPageState extends State<WorklistTabPage> {
         await AssistantMethods.searchAddressForGeographicCoordinates(
             handymanCurrentPosition!, context);
     // print("this is your address = " + humanReadableAddress);
+    AssistantMethods.readHandymanRatings(context);
   }
 
   readCurrentHandymanInformation() async {
@@ -79,8 +77,6 @@ class _WorklistTabPageState extends State<WorklistTabPage> {
         onlineHandymanData.email = (snap.snapshot.value as Map)["email"];
         onlineHandymanData.diplome =
             (snap.snapshot.value as Map)["handyman_details"]["diplome"];
-        onlineHandymanData.jobtype =
-            (snap.snapshot.value as Map)["handyman_details"]["jobtype"];
         onlineHandymanData.skills =
             (snap.snapshot.value as Map)["handyman_details"]["skills"];
         onlineHandymanData.vat =
@@ -95,30 +91,11 @@ class _WorklistTabPageState extends State<WorklistTabPage> {
       }
     });
 
-    // FirebaseDatabase.instance
-    //     .ref()
-    //     .child("handyman")
-    //     .child(currentFribaseUser!.uid)
-    //     .once()
-    //     .then((snap) {
-    // if (snap.snapshot.value != null) {
-    //   onlineHandymanData.id = (snap.snapshot as Map)["id"];
-    //   onlineHandymanData.name = (snap.snapshot as Map)["name"];
-    //   onlineHandymanData.phone = (snap.snapshot as Map)["phone"];
-    //   onlineHandymanData.email = (snap.snapshot as Map)["email"];
-    //   onlineHandymanData.skills =
-    //       (snap.snapshot as Map)["handyman_details"]["skills"];
-    //   onlineHandymanData.diplome =
-    //       (snap.snapshot as Map)["handyman_details"]["diplome"];
-    //   onlineHandymanData.vat =
-    //       (snap.snapshot as Map)["handyman_details"]["vat"];
-    // }
-    //   print("Car")
-    // });
-
     PushNotificationSystem pushNotificationSystem = PushNotificationSystem();
     pushNotificationSystem.initializeCloudMessaging(context);
     pushNotificationSystem.generateAndGetToken();
+
+    AssistantMethods.readHandymanEarnings(context);
   }
 
   @override
@@ -164,7 +141,6 @@ class _WorklistTabPageState extends State<WorklistTabPage> {
           child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
             ElevatedButton(
               onPressed: () {
-                // updateDriversLocationAtRealTime();
                 if (isHandymanActive != true) {
                   updateHandymansLocationAtRealTime();
                   handyIsOnlineNow();
