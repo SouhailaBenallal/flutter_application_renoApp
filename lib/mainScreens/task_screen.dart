@@ -189,7 +189,6 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
                   const SizedBox(height: 10.0),
                   ElevatedButton.icon(
                       onPressed: () {
-                        //[driver has arrived at user PickUp Location] - Arrived Button
                         if (handymanRequestStatus == "accepted") {
                           handymanRequestStatus = "arrived";
 
@@ -347,17 +346,17 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
     databaseReference
         .child("handyman_details")
         .set(onlineHandymanData.jobtype.toString());
-    saveHandymanRequestIdToHandymanHistory();
+    // saveHandymanRequestIdToHandymanHistory();
   }
 
-  saveHandymanRequestIdToHandymanHistory() {
-    DatabaseReference handymansHistoryRef = FirebaseDatabase.instance
-        .ref()
-        .child("handyman")
-        .child(currentFribaseUser!.uid)
-        .child("handymansHistory");
-    handymansHistoryRef
-        .child(widget.clientHandymanRequestDetails!.handymanRequestId!)
-        .set(true);
-  }
+  // saveHandymanRequestIdToHandymanHistory() {
+  //   DatabaseReference handymansHistoryRef = FirebaseDatabase.instance
+  //       .ref()
+  //       .child("handyman")
+  //       .child(currentFribaseUser!.uid)
+  //       .child("handymansHistory");
+  //   handymansHistoryRef
+  //       .child(widget.clientHandymanRequestDetails!.handymanRequestId!)
+  //       .set(true);
+  // }
 }

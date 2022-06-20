@@ -1,8 +1,8 @@
 import 'dart:ffi';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_reno/tabPages/account_tab.dart';
-import 'package:flutter_application_reno/tabPages/chats_tab.dart';
-import 'package:flutter_application_reno/tabPages/request_tab.dart';
+import 'package:flutter_application_reno/tabPages/ratings_tab.dart';
+import 'package:flutter_application_reno/tabPages/earnings_tab.dart';
 import 'package:flutter_application_reno/tabPages/worklist_tab.dart';
 
 class MainScreen extends StatefulWidget {
@@ -36,11 +36,11 @@ class _MainScreenState extends State<MainScreen>
         // ignore: prefer_const_constructors
         physics: NeverScrollableScrollPhysics(),
         controller: tabController,
-        children: const [
+        children: [
           WorklistTabPage(),
-          RequestTabPage(),
-          ChatsTabPage(),
-          AccountTapPage()
+          EarningsTabPage(),
+          RatingsTabPage(),
+          AcountScreen()
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(
