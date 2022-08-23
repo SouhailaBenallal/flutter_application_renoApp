@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_reno/authentication/signin_screen.dart';
 import 'package:flutter_application_reno/all/all.dart';
-
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import '../assets/constants.dart';
 import '../assets/widgets.dart';
 
@@ -13,6 +13,14 @@ class WorklistScreen extends StatefulWidget {
 }
 
 class _WorklistScreenState extends State<WorklistScreen> {
+  late GoogleMapController mapController;
+  MapType _currentMapType = MapType.normal;
+  final LatLng _center = const LatLng(50.8503396, 4.3517103);
+
+  void _onMapCreated(GoogleMapController controller) {
+    mapController = controller;
+  }
+
   int selectedIndex = 0;
 
   List<Widget> getJobsList() {
@@ -105,12 +113,21 @@ class _WorklistScreenState extends State<WorklistScreen> {
                         "lib/assets/icons/logo.png",
                         scale: 6,
                       ),
-                      Container(
-                        color: Colors.red,
-                        height: (MediaQuery.of(context).size.width) / 4 * 5,
-                        width: MediaQuery.of(context).size.width,
-                        child: const Center(
-                            child: Text("CE QUE TU VEUX MONTRER ICI")),
+                      Stack(
+                        children: [
+                          Container(
+                            height: 500,
+                            child: GoogleMap(
+                              mapType: _currentMapType,
+                              myLocationButtonEnabled: false,
+                              onMapCreated: _onMapCreated,
+                              initialCameraPosition: CameraPosition(
+                                target: _center,
+                                zoom: 14.0,
+                              ),
+                            ),
+                          )
+                        ],
                       ),
                       const SizedBox(height: kBigSpacing),
                       Text("2 jobs nearly", style: kHeadline4),

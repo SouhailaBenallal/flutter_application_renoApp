@@ -260,15 +260,9 @@ class _ModifyImageState extends State<ModifyImage> {
                   style: ElevatedButton.styleFrom(
                     primary: kColorBlack,
                   ),
-                  child: const Text('Finish'),
+                  child: const Text('Save Image'),
                   onPressed: () {
                     uploadFile();
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const WorklistScreen(),
-                      ),
-                    );
                   },
                 )
         ],

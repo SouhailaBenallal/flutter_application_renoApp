@@ -50,6 +50,18 @@ class _SkillsScreenState extends State<SkillsScreen> {
         context, MaterialPageRoute(builder: (c) => const AvialabiltyScreen()));
   }
 
+  saveHandymanSkillsRoofing() {
+    DatabaseReference handyRef =
+        FirebaseDatabase.instance.ref().child("handyman");
+    handyRef
+        .child(currentFribaseUser!.uid)
+        .child("handyman_skills")
+        .set("Roofing");
+    Fluttertoast.showToast(msg: "Handyman Details has been saved.");
+    Navigator.push(
+        context, MaterialPageRoute(builder: (c) => const AvialabiltyScreen()));
+  }
+
   saveHandymanSkillsHeatingE() {
     DatabaseReference handyRef =
         FirebaseDatabase.instance.ref().child("handyman");
@@ -130,6 +142,12 @@ class _SkillsScreenState extends State<SkillsScreen> {
                     title: const Text("Plumber"),
                     function: () {
                       saveHandymanSkillsPlumbing();
+                    },
+                    trailing: Image.asset("lib/assets/icons/plumbing.png")),
+                MandatoryStepContainer(
+                    title: const Text("Roofing"),
+                    function: () {
+                      saveHandymanSkillsRoofing();
                     },
                     trailing: Image.asset("lib/assets/icons/plumbing.png")),
               ],
