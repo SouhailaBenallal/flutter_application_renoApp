@@ -107,7 +107,7 @@ class _handymanInfoScreenState extends State<handymanInfoScreen> {
                 )),
             const SizedBox(height: 20),
             DropdownButton(
-                iconSize: 30,
+                iconSize: 20,
                 value: selectedjobType,
                 hint: const Text(
                   "Please choose your job function",
@@ -123,7 +123,7 @@ class _handymanInfoScreenState extends State<handymanInfoScreen> {
                     // ignore: sort_child_properties_last
                     child: Text(
                       job,
-                      style: const TextStyle(color: Colors.black),
+                      style: const TextStyle(color: Colors.black, fontSize: 12),
                     ),
                     value: job,
                   );

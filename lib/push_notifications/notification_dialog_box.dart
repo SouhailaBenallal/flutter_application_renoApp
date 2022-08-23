@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
@@ -176,7 +178,11 @@ class _NotificationDialogBoxState extends State<NotificationDialogBox> {
                       });
 
                       Future.delayed(const Duration(milliseconds: 2000), () {
-                        SystemNavigator.pop();
+                        if (Platform.isAndroid) {
+                          SystemNavigator.pop();
+                        } else if (Platform.isIOS) {
+                          exit(0);
+                        }
                       });
                     },
                     child: Text(

@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_application_reno/all/all.dart';
@@ -54,11 +56,7 @@ class _AcountScreenState extends State<AcountScreen> {
             iconData: Icons.email,
           ),
           InfoDesignUIWidget(
-            textInfo: onlineHandymanData.jobtype! +
-                "" +
-                onlineHandymanData.skills! +
-                "" +
-                onlineHandymanData.diplome!,
+            textInfo: handymanTaskJob,
             iconData: Icons.task,
           ),
           const SizedBox(
@@ -67,7 +65,11 @@ class _AcountScreenState extends State<AcountScreen> {
           ElevatedButton(
               onPressed: () {
                 fAuth.signOut();
-                SystemNavigator.pop();
+                if (Platform.isAndroid) {
+                  SystemNavigator.pop();
+                } else if (Platform.isIOS) {
+                  exit(0);
+                }
               },
               style: ElevatedButton.styleFrom(primary: Colors.yellow[700]),
               child: const Text(
@@ -79,31 +81,3 @@ class _AcountScreenState extends State<AcountScreen> {
     );
   }
 }
-
-// import 'package:flutter/material.dart';
-// import 'package:flutter_application_reno/all/all.dart';
-// import 'package:flutter_application_reno/splashScreen/splash_screen.dart';
-
-// class AccountTapPage extends StatefulWidget {
-//   const AccountTapPage({Key? key}) : super(key: key);
-
-//   @override
-//   State<AccountTapPage> createState() => _AccountTapPageState();
-// }
-
-// class _AccountTapPageState extends State<AccountTapPage> {
-//   @override
-//   Widget build(BuildContext context) {
-//     return Center(
-//         child: ElevatedButton(
-//       child: const Text(
-//         "Sign Out",
-//       ),
-//       onPressed: () {
-//         fAuth.signOut();
-//         Navigator.push(
-//             context, MaterialPageRoute(builder: (c) => const MySplashScreen()));
-//       },
-//     ));
-//   }
-// }

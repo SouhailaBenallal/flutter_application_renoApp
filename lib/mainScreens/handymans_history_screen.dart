@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
@@ -21,7 +23,11 @@ class _HandymansHistoryScreenState extends State<HandymansHistoryScreen> {
         leading: IconButton(
           icon: const Icon(Icons.close),
           onPressed: () {
-            SystemNavigator.pop();
+            if (Platform.isAndroid) {
+              SystemNavigator.pop();
+            } else if (Platform.isIOS) {
+              exit(0);
+            }
           },
         ),
       ),

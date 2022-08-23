@@ -1,5 +1,3 @@
-import 'dart:async';
-import 'dart:ui';
 import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -18,7 +16,7 @@ Position? clientCurrentPosition;
 HandymanData onlineHandymanData = HandymanData();
 String? handymanTaskJob = "";
 ClientHandymanRequestInformation? clientHandymanRequestDetails;
-String titleStartsRating = "Good";
+String titleStartsRating = "";
 bool isHandymanActive = false;
 String statusText = "Now Offline";
 Color buttonColor = Colors.grey;

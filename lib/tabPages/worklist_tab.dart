@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -117,7 +118,7 @@ class _WorklistTabPageState extends State<WorklistTabPage> {
           onMapCreated: (GoogleMapController controller) {
             _controllerGoogleMap.complete(controller);
             newGoogleMapController = controller;
-            blackThemeGoogleMap(newGoogleMapController);
+            // blackThemeGoogleMap(newGoogleMapController);
             locateHandymanPosition();
           },
         ),
@@ -239,7 +240,11 @@ class _WorklistTabPageState extends State<WorklistTabPage> {
 
     Future.delayed(const Duration(microseconds: 2000), () {
       //SystemChannels.platform.invokeListMethod("SystemNavigator.pop");
-      SystemNavigator.pop();
+      if (Platform.isAndroid) {
+        SystemNavigator.pop();
+      } else if (Platform.isIOS) {
+        exit(0);
+      }
     });
   }
 }

@@ -1,6 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_reno/infoHandler/app_info.dart';
+import 'package:flutter_application_reno/screens/welcomeScreen.dart';
 import 'package:flutter_application_reno/splashScreen/splash_screen.dart';
 import 'package:provider/provider.dart';
 
@@ -18,7 +19,7 @@ void main() async {
             primarySwatch: Colors.blue,
           ),
           // ignore: prefer_const_constructors
-          home: MySplashScreen(),
+          home: WelcomeScreen(),
           debugShowCheckedModeBanner: false,
         ),
       ),

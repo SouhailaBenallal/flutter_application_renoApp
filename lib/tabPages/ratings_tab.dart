@@ -1,14 +1,15 @@
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_application_reno/all/all.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 import 'package:smooth_star_rating_nsafe/smooth_star_rating.dart';
-
+import '../all/all.dart';
 import '../infoHandler/app_info.dart';
 
 class RatingsTabPage extends StatefulWidget {
+  const RatingsTabPage({Key? key}) : super(key: key);
+
   @override
   State<RatingsTabPage> createState() => _RatingsTabPageState();
 }
@@ -20,6 +21,7 @@ class _RatingsTabPageState extends State<RatingsTabPage> {
   void initState() {
     // TODO: implement initState
     super.initState();
+
     getRatingsNumber();
   }
 
@@ -28,6 +30,7 @@ class _RatingsTabPageState extends State<RatingsTabPage> {
       ratingsNumber = double.parse(
           Provider.of<AppInfo>(context, listen: false).handymanAverageRatings);
     });
+
     setupRatingsTitle();
   }
 
@@ -49,10 +52,10 @@ class _RatingsTabPageState extends State<RatingsTabPage> {
     }
     if (ratingsNumber == 4) {
       setState(() {
-        titleStartsRating = "Verry Good";
+        titleStartsRating = "Very Good";
       });
     }
-    if (ratingsNumber == 1) {
+    if (ratingsNumber == 5) {
       setState(() {
         titleStartsRating = "Excellent";
       });
@@ -64,36 +67,41 @@ class _RatingsTabPageState extends State<RatingsTabPage> {
     return Scaffold(
       backgroundColor: Colors.white,
       body: Dialog(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
-        backgroundColor: Colors.transparent,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(14),
+        ),
+        backgroundColor: Colors.white60,
         child: Container(
           margin: const EdgeInsets.all(8),
           width: double.infinity,
           decoration: BoxDecoration(
-              color: Colors.white, borderRadius: BorderRadius.circular(6)),
+            color: Colors.white54,
+            borderRadius: BorderRadius.circular(6),
+          ),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
               const SizedBox(
-                height: 22,
+                height: 22.0,
               ),
-              Text(
-                "Your ratings score",
+              const Text(
+                "Your Ratings:",
                 style: TextStyle(
-                    fontSize: 22,
-                    letterSpacing: 2,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.yellow[700]),
+                  fontSize: 22,
+                  letterSpacing: 2,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black54,
+                ),
               ),
               const SizedBox(
-                height: 22,
+                height: 22.0,
               ),
               const Divider(
-                height: 4,
-                thickness: 4,
+                height: 4.0,
+                thickness: 4.0,
               ),
               const SizedBox(
-                height: 22,
+                height: 22.0,
               ),
               SmoothStarRating(
                 rating: ratingsNumber,
@@ -103,15 +111,20 @@ class _RatingsTabPageState extends State<RatingsTabPage> {
                 borderColor: Colors.yellow[700],
                 size: 46,
               ),
-              const SizedBox(height: 12),
+              const SizedBox(
+                height: 12.0,
+              ),
               Text(
                 titleStartsRating,
                 style: TextStyle(
-                    fontSize: 30,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.yellow[700]),
+                  fontSize: 30,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.yellow[700],
+                ),
               ),
-              const SizedBox(height: 18),
+              const SizedBox(
+                height: 18.0,
+              ),
             ],
           ),
         ),

@@ -1,4 +1,3 @@
-import 'dart:ffi';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_reno/tabPages/account_tab.dart';
 import 'package:flutter_application_reno/tabPages/ratings_tab.dart';
@@ -40,15 +39,15 @@ class _MainScreenState extends State<MainScreen>
           WorklistTabPage(),
           EarningsTabPage(),
           RatingsTabPage(),
-          AcountScreen()
+          const AcountScreen(),
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(
         items: const [
           BottomNavigationBarItem(icon: Icon(Icons.home), label: "Worklist"),
-          BottomNavigationBarItem(icon: Icon(Icons.task), label: "Request"),
+          BottomNavigationBarItem(icon: Icon(Icons.euro), label: "My Earnings"),
           BottomNavigationBarItem(
-              icon: Icon(Icons.chat_bubble), label: "Chats"),
+              icon: Icon(Icons.star_border), label: "My ratings"),
           BottomNavigationBarItem(
               icon: Icon(Icons.account_box_outlined), label: "Account")
         ],

@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_application_reno/all/all.dart';
@@ -84,7 +86,11 @@ class _FareAmountCollectionDialogState
                 ),
                 onPressed: () {
                   Future.delayed(const Duration(milliseconds: 2000), () {
-                    SystemNavigator.pop();
+                    if (Platform.isAndroid) {
+                      SystemNavigator.pop();
+                    } else if (Platform.isIOS) {
+                      exit(0);
+                    }
                   });
                 },
                 child: Row(

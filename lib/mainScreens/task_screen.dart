@@ -343,9 +343,8 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
     databaseReference.child("handymanId").set(onlineHandymanData.id);
     databaseReference.child("handymanName").set(onlineHandymanData.name);
     databaseReference.child("handymanPhone").set(onlineHandymanData.phone);
-    databaseReference
-        .child("handyman_details")
-        .set(onlineHandymanData.jobtype.toString());
+    databaseReference.child("handyman_details").set(handymanTaskJob.toString());
+
     // saveHandymanRequestIdToHandymanHistory();
   }
 

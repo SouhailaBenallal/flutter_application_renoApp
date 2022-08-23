@@ -6,6 +6,8 @@ import 'package:flutter_application_reno/authentication/signup_screen.dart';
 import 'package:flutter_application_reno/splashScreen/splash_screen.dart';
 import 'package:flutter_application_reno/widgets/progress_dialog.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import '../assets/constants.dart';
+import '../assets/widgets.dart';
 
 class SigninScreen extends StatefulWidget {
   const SigninScreen({Key? key}) : super(key: key);
@@ -74,81 +76,107 @@ class _SigninScreenState extends State<SigninScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
-      body: SingleChildScrollView(
-          child: Padding(
-        padding: const EdgeInsets.all(20.0),
-        child: Column(
-          children: [
-            const SizedBox(height: 30),
-            Padding(
-              padding: const EdgeInsets.all(30.0),
-              child: Image.asset("images/logo.png"),
-            ),
-            const SizedBox(height: 10),
-            const Text("Login as a Handyman",
-                style: TextStyle(
-                    fontSize: 30,
-                    color: Colors.black,
-                    fontWeight: FontWeight.bold)),
-            TextField(
-                controller: emailtextEditingController,
-                keyboardType: TextInputType.emailAddress,
-                style: const TextStyle(color: Colors.black),
-                decoration: const InputDecoration(
-                  labelText: "Email",
-                  hintText: "Email",
-                  enabledBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(color: Colors.black)),
-                  focusedBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(color: Colors.black)),
-                  hintStyle: TextStyle(color: Colors.black, fontSize: 10),
-                  labelStyle: TextStyle(color: Colors.black, fontSize: 14),
-                )),
-            TextField(
-                controller: pswtextEditingController,
-                keyboardType: TextInputType.text,
-                obscureText: true,
-                style: const TextStyle(color: Colors.black),
-                decoration: const InputDecoration(
-                  labelText: "Password",
-                  hintText: "Password",
-                  enabledBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(color: Colors.black)),
-                  focusedBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(color: Colors.black)),
-                  hintStyle: TextStyle(color: Colors.black, fontSize: 10),
-                  labelStyle: TextStyle(color: Colors.black, fontSize: 14),
-                )),
-            const SizedBox(height: 10),
-            ElevatedButton(
-                onPressed: () {
-                  /*  Navigator.push(context,
-                      MaterialPageRoute(builder: (c) => handymanInfoScreen()));*/
-                  validateForm();
-                },
-                style: ElevatedButton.styleFrom(
-                  primary: Colors.black,
-                ),
-                child: const Text(
-                  "Login",
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 18,
-                  ),
-                )),
-            TextButton(
-                child: const Text(
-                  "Don't have an account yet? Sign Up here.",
-                  style: TextStyle(color: Colors.black),
-                ),
-                onPressed: () {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (c) => SignUpScreen()));
-                })
-          ],
-        ),
-      )),
-    );
+        backgroundColor: kAppBackgroundColor,
+        body: SingleChildScrollView(
+            child: SizedBox(
+                height: MediaQuery.of(context).size.height,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 30.0),
+                  child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Column(children: [
+                          Container(
+                            height: MediaQuery.of(context).size.width - 120,
+                            width: MediaQuery.of(context).size.width - 120,
+                            decoration: const BoxDecoration(
+                              image: DecorationImage(
+                                image: AssetImage("lib/assets/icons/logo.png"),
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                          ),
+                          Column(
+                            children: [
+                              Text(
+                                "Login as a Handyman",
+                                style: kHeadline2,
+                              ),
+                              const SizedBox(height: kBigSpacing),
+                              TextField(
+                                  controller: emailtextEditingController,
+                                  keyboardType: TextInputType.emailAddress,
+                                  style: const TextStyle(color: Colors.black),
+                                  decoration: const InputDecoration(
+                                    labelText: "Email",
+                                    hintText: "Email",
+                                    enabledBorder: UnderlineInputBorder(
+                                        borderSide:
+                                            BorderSide(color: Colors.black)),
+                                    focusedBorder: UnderlineInputBorder(
+                                        borderSide:
+                                            BorderSide(color: Colors.black)),
+                                    hintStyle: TextStyle(
+                                        color: Colors.black, fontSize: 10),
+                                    labelStyle: TextStyle(
+                                        color: Colors.black, fontSize: 14),
+                                  )),
+                              TextField(
+                                  controller: pswtextEditingController,
+                                  keyboardType: TextInputType.text,
+                                  obscureText: true,
+                                  style: const TextStyle(color: Colors.black),
+                                  decoration: const InputDecoration(
+                                    labelText: "Password",
+                                    hintText: "Password",
+                                    enabledBorder: UnderlineInputBorder(
+                                        borderSide:
+                                            BorderSide(color: Colors.black)),
+                                    focusedBorder: UnderlineInputBorder(
+                                        borderSide:
+                                            BorderSide(color: Colors.black)),
+                                    hintStyle: TextStyle(
+                                        color: Colors.black, fontSize: 10),
+                                    labelStyle: TextStyle(
+                                        color: Colors.black, fontSize: 14),
+                                  )),
+                              const SizedBox(height: 10),
+                              ElevatedButton(
+                                  onPressed: () {
+                                    validateForm();
+                                  },
+                                  style: ElevatedButton.styleFrom(
+                                    primary: Colors.black,
+                                    shape: const RoundedRectangleBorder(
+                                      borderRadius:
+                                          BorderRadius.all(Radius.circular(7)),
+                                    ),
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 100.0, vertical: 15.0),
+                                  ),
+                                  child: const Text(
+                                    "Login",
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 18,
+                                    ),
+                                  )),
+                              TextButton(
+                                  child: const Text(
+                                    "Don't have an account yet? Sign Up here.",
+                                    style: TextStyle(color: Colors.black),
+                                  ),
+                                  onPressed: () {
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (c) => SignUpScreen()));
+                                  })
+                            ],
+                          ),
+                        ])
+                      ]),
+                ))));
   }
 }
